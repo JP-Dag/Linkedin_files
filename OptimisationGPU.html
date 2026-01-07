@@ -456,7 +456,15 @@
         const p_tot_sobriety = ps * n / (n - 1);
         const f_sobriety = Math.pow(ps / (k * (n - 1)), 1/n);
 
-        const p_tot_prod = ps + (3 / (n - 3)) * ps;
+        let p_tot_prod_calc = ps + (3 / (n - 3)) * ps;
+
+		// Application de la limite physique (Clamp)
+		// Si le calcul dépasse P_max ou si n <= 3 (division par zéro ou négative), on sature au TDP
+		if (n <= 3 || p_tot_prod_calc > pmax) {
+			p_tot_prod = pmax; 
+		} else {
+			p_tot_prod = p_tot_prod_calc;
+		}
         const f_prod = Math.pow((3 * ps) / (k * (n - 3)), 1/n);
 
         document.getElementById('res_power_sobriety').innerText = Math.round(p_tot_sobriety);
